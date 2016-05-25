@@ -1,17 +1,43 @@
-start
-  = main
+grammar Bo$$;
+r : ID EQUAL Expr EOI;
 
-main
- = "main()\n{\n"WHATSUP:expr"}"{return WHATSUP;}
+//Expression mathematique
+Expr : Sum ;
 
-expr
- = "What's up?\n"[^\n]+"\n"DOING:question"\n"{return "That's cool,man!\n"+DOING;}
+//somme
+Sum : Sub '+' Sum 
+	| Sub
+	;
 
-question
- = "What are you doing?\n"DO:(a:hate/b:cool){return DO;}
+//difference	
+Sub : Exp '-' Sub 
+	| Exp
+	;
 
-hate
- = "alf"i{return "I hate alf";}
 
-cool
- = [^\n]+{return "Ok, man!";}
+//multiplication	
+Div : Mul '/' Div 
+	| Mul
+	;
+
+//division
+Mul : Pri '*' Mul 
+	| Pri
+	;
+
+//pour priotiriser les fonctions selon les parantheses
+Pri : INT
+	| '('Sum')' 
+	;
+
+//nuombres
+INT : [0-9]+ ;
+//le nom de la variable
+ID : [a-zA-Z]+ ;
+
+//separateur
+ 
+EQUAL : ' = ' ;
+
+//End Of Input
+EOI : ' $$' ;
